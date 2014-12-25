@@ -6,6 +6,7 @@ public class ResultLocation {
 	public Float lat;
 	public Float lng;
 	public String imgUrl;
+	public String[] labels;
 	
 	public ResultLocation(){
 		this.name = "";
@@ -30,6 +31,10 @@ public class ResultLocation {
 	public String getImgUrl() {
 		return imgUrl;
 	}
+	public String[] getLabels() {
+		return labels;
+	}
+
 
 	public void setName(String name) {
 		this.name = name;
@@ -45,6 +50,10 @@ public class ResultLocation {
 	}
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
+	}
+
+	public void setLabels(String[] labels) {
+		this.labels = labels;
 	}
 
 
