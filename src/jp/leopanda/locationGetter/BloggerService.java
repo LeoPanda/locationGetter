@@ -8,14 +8,14 @@ import net.arnx.jsonic.JSON;
 import net.arnx.jsonic.JSONException;
 import jp.leopanda.locationGetter.UrlService.ContentType;
 import jp.leopanda.locationGetter.UrlService.Result;
-import jp.loepanda.locationGetter.POJO.BloggerPostItems;
+import jp.loepanda.locationGetter.POJO.BloggerPostItem;
 import jp.loepanda.locationGetter.POJO.BloggerPostList;
 import jp.loepanda.locationGetter.POJO.ResultLocation;
 
 public class BloggerService {
 	private static String API_KEY = "AIzaSyC25g27Bbczu5xXyyPoEcrK-scuoZEjTFM";
 	private static String BLOG_ID = "8188837734572962617";
-	private static String FEALD_ITEMS = "items(images%2Clocation%2Ctitle%2Curl)%2CnextPageToken";
+	private static String FEALD_ITEMS = "items(images%2Clabels%2Clocation%2Ctitle%2Curl)%2CnextPageToken";
 	private static int blogger_max_results = 10;
 	
 	private static final Logger log = Logger.getLogger(Servlet.class.getName());
@@ -44,9 +44,11 @@ public class BloggerService {
 	 */
 	private ArrayList<ResultLocation> getLocationList() {
 		ArrayList<ResultLocation> resultLocationList = new ArrayList<ResultLocation>();
-		BloggerPostList onePage = getPostOnePage("");
-		while (onePage.getNextPageToken() != null) {
-			for (BloggerPostItems items : onePage.getItems()) {
+		BloggerPostList onePage;
+		String nextPageToken = "";
+		while (nextPageToken != null) {
+			onePage = getPostOnePage(nextPageToken);
+			for (BloggerPostItem items : onePage.getItems()) {
 				if ( items.getLocation() != null ){
 					ResultLocation resultLocation = new ResultLocation();
 					resultLocation.setName(items.getTitle());
@@ -57,10 +59,11 @@ public class BloggerService {
 						resultLocation.setImgUrl(items.getImages()[0].getUrl()
 													.replaceFirst("/s\\d+/","/s120/"));
 					}
+					resultLocation.setLabels(items.getLabels());
 					resultLocationList.add(resultLocation);
 				}
 			}
-			onePage = getPostOnePage(onePage.getNextPageToken());
+			nextPageToken = onePage.getNextPageToken();
 		}
 		return resultLocationList;
 	}

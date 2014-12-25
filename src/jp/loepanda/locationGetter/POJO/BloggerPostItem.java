@@ -3,11 +3,12 @@ package jp.loepanda.locationGetter.POJO;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class BloggerPostItems implements Serializable{
+public class BloggerPostItem implements Serializable{
 		public String url;
 		public String title;
 		public BloggerPostItemLocation location;
 		public BloggerPostImages[] images;
+		public String[] labels;
 		
 		public String getUrl() {
 			return url;
@@ -20,6 +21,9 @@ public class BloggerPostItems implements Serializable{
 		}
 		public BloggerPostImages[] getImages() {
 			return images;
+		}
+		public String[] getLabels() {
+			return labels;
 		}
 
 }

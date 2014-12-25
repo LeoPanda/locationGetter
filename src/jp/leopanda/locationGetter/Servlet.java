@@ -13,6 +13,7 @@ public class Servlet extends HttpServlet {
 		public void doGet(HttpServletRequest req, HttpServletResponse resp)
 				throws IOException {
 	 		String callBack = req.getParameter("callback");  // get request parameter for JSONP
+	 		String category = req.getParameter("category");  // get request parameter for selected category
 
 	 		String JSON  = "application/json;charset=utf-8";
 	 		String JSONP = "text/javascript;charset=utf-8";
@@ -22,7 +23,7 @@ public class Servlet extends HttpServlet {
 			
 			if(callBack != null){
 				resp.setContentType(JSONP);
-				resp.getWriter().print(callBack + "(" + responseBody +");");
+				resp.getWriter().print(callBack + "(" + responseBody +"," + category + ");");
 			}else{
 				resp.setContentType(JSON);
 				resp.getWriter().print(responseBody);				
