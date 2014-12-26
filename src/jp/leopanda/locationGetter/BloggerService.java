@@ -1,6 +1,7 @@
 package jp.leopanda.locationGetter;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -42,8 +43,8 @@ public class BloggerService {
 	 * @return 地図情報のリスト
 	 * @throws HostGateException
 	 */
-	private ArrayList<ResultLocation> getLocationList() {
-		ArrayList<ResultLocation> resultLocationList = new ArrayList<ResultLocation>();
+	private List<ResultLocation> getLocationList() {
+		List<ResultLocation> resultLocationList = new ArrayList<ResultLocation>();
 		BloggerPostList onePage;
 		String nextPageToken = "";
 		while (nextPageToken != null) {
