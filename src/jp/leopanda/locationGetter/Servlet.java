@@ -19,7 +19,7 @@ public class Servlet extends HttpServlet {
 
 	 	@Override
 	 	/*
-	 	 * DoGet for test
+	 	 * DoGet
 	 	 * http://(デプロイサーバー)/test
 	 	 * パラメータ:
 	 	 * callback:JSONPコールバック関数を指定
