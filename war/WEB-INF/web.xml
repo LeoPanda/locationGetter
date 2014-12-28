@@ -5,13 +5,21 @@
          version="2.5"
          xmlns="http://java.sun.com/xml/ns/javaee">
 
-  <servlet>
-		<servlet-name>LocationGetter</servlet-name>
-		<servlet-class>jp.leopanda.locationGetter.Servlet</servlet-class>
- </servlet>
+	 <servlet>
+			<servlet-name>LocationGetter</servlet-name>
+			<servlet-class>jp.leopanda.locationGetter.Servlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>LocationGetter</servlet-name>
 		<url-pattern>/locationgetter</url-pattern>
+	</servlet-mapping>
+	 <servlet>
+			<servlet-name>LocationGetterTester</servlet-name>
+			<servlet-class>jp.leopanda.locationGetter.test.Servlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LocationGetterTester</servlet-name>
+		<url-pattern>/test</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

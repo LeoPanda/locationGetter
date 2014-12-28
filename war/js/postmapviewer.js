@@ -7,11 +7,11 @@
 		mcOptions = { gridSize: 50, maxZoom: 15};//MarkerClusterオプション	
 		currentInfoWindow = null; //今開いている情報ウィンドウ
 		icons = [
-		         ["","footprints.png","すべて"],
-		         ["桜","cherry.png","お花見ポイント"],
-		         ["紅葉","leaf.png","紅葉ポイント"],
-		         ["絶景","camera.png","絶景ポイント"],
-		         ["ルート図","bike.png","自転車ルート"]
+		         ["","/image/footprints.png","すべて"],
+		         ["絶景","/image/camera.png","絶景ポイント"],
+		         ["花","/image/cherry.png","花風景ポイント"],
+		         ["紅葉","/image/leaf.png","紅葉ポイント"],
+		         ["ルート図","/image/bike.png","自転車ルート"]
 				];
     	//地図描画
     	function setMap(center,zoom){
@@ -21,6 +21,7 @@
 	    		center: center,                            
 	    		mapTypeControl: false,
 	    		panControl:false,
+	    		styles: [{stylers: [ {saturation: -10 }]}],
 	    		mapTypeId: google.maps.MapTypeId.ROADMAP    
 			 };
 			return new google.maps.Map( document.getElementById( "map-canvas"), myOptions);
@@ -103,6 +104,19 @@
 			selector.innerHTML = options;
 			return selector;
 		};
+		//カテゴリセレクタの描画（IEでinnerHTMLが使えないバグ対応）
+   		function setSelectorIE(selected){
+			var selector = document.getElementById('category-selector');
+			for(i = 0;i<icons.length;i++){
+				var op = document.createElement('option');
+				op.value = icons[i][0];
+				op.appendChild(document.createTextNode(icons[i][2]));
+				op.selected = (icons[i][0] == selected) ? true: false;
+				selector.appendChild(op);
+			}
+			return selector;
+		};
+
 		//ズームを戻す
 		function resetZoom(){
 			map.setCenter(defaultCenter);
@@ -115,13 +129,26 @@
 			var mcs = setMarkers(LOCATION_DATA,map,selector.options[selector.selectedIndex].value);
 		    markerCluster.addMarkers(mcs);// MarkerClusterを表示
 		};
+		//オプションパラメータ(初期選択カテゴリ)の取得
+		function getParm(){
+			var urlparm = location.search;
+			var parm;
+			if( urlparm != null){
+				parm = urlparm.slice(urlparm.indexOf('=')+1,urlparm.length);
+			}else{
+				parm = '';
+			}
+			return decodeURIComponent(parm);
+		};
     	//JSONP受信ファンクション
-    	viewMarkers = function(locData,selectedCategory){
-    		selectedCategory = ((selectedCategory == null) ? '':selectedCategory);
+    	viewMarkers = function(locData){
+    		var selectedCategory = getParm();
     		LOCATION_DATA = locData;//地図データをグローバル化
-    		selector = setSelector(selectedCategory);
+    		selector = setSelectorIE(selectedCategory);
   	    	map = setMap(defaultCenter,defaultZoom);//地図初期表示
   	    	var mcs = setMarkers(locData,map,selectedCategory);//マーカーの配列
 		    markerCluster = new MarkerClusterer( map, mcs, mcOptions );// MarkerClusterを表示
    		};
+
+
 

@@ -1,6 +1,7 @@
 package jp.leopanda.locationGetter;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -11,11 +12,16 @@ import jp.leopanda.locationGetter.UrlService.Result;
 import jp.loepanda.locationGetter.POJO.BloggerPostItem;
 import jp.loepanda.locationGetter.POJO.BloggerPostList;
 import jp.loepanda.locationGetter.POJO.ResultLocation;
-
+/**
+ * Blogger API ハンドリングサービス
+ * @author LeoPanda
+ *
+ */
 public class BloggerService {
 	private static String API_KEY = ""; //enter your own API_KEY
 	private static String BLOG_ID = ""; //enter your own BLOG_ID 
 	private static String FEALD_ITEMS = "items(images%2Clabels%2Clocation%2Ctitle%2Curl)%2CnextPageToken";
+
 	private static int blogger_max_results = 10;
 	
 	private static final Logger log = Logger.getLogger(Servlet.class.getName());
@@ -24,10 +30,10 @@ public class BloggerService {
 	 * Blogger投稿のgeoTag情報をJSON形式で取り出す。
 	 * @return
 	 */
-	public String getLocationJson() {
+	public String getLocationJson(List<ResultLocation> location) {
 		String retJson = null;
 		try {
-			retJson =  JSON.encode(getLocationList());
+			retJson =  JSON.encode(location);
 		} catch (JSONException e) {
 			log.info("JsonException occured while encoding.");
 			e.printStackTrace();
@@ -42,13 +48,17 @@ public class BloggerService {
 	 * @return 地図情報のリスト
 	 * @throws HostGateException
 	 */
-	private ArrayList<ResultLocation> getLocationList() {
-		ArrayList<ResultLocation> resultLocationList = new ArrayList<ResultLocation>();
-		BloggerPostList onePage = getPostOnePage("");
-		while (onePage.getNextPageToken() != null) {
+
+	public List<ResultLocation> getLocationList(boolean isTest) {
+		List<ResultLocation> resultLocationList = new ArrayList<ResultLocation>();
+		BloggerPostList onePage;
+		String nextPageToken = "";
+		while (nextPageToken != null) {
+			onePage = getPostOnePage(nextPageToken);
 			for (BloggerPostItem items : onePage.getItems()) {
 				if ( items.getLocation() != null ){
 					ResultLocation resultLocation = new ResultLocation();
+					resultLocation.setId(items.getId());
 					resultLocation.setName(items.getTitle());
 					resultLocation.setUrl(items.getUrl());
 					resultLocation.setLng(items.getLocation().getLng());
@@ -61,7 +71,7 @@ public class BloggerService {
 					resultLocationList.add(resultLocation);
 				}
 			}
-			onePage = getPostOnePage(onePage.getNextPageToken());
+			nextPageToken = isTest ? null : onePage.getNextPageToken();
 		}
 		return resultLocationList;
 	}

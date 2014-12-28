@@ -1,6 +1,7 @@
 package jp.loepanda.locationGetter.POJO;
 
 public class ResultLocation {
+	private String id;
 	public String name;
 	public String url;
 	public Float lat;
@@ -9,11 +10,15 @@ public class ResultLocation {
 	public String[] labels;
 	
 	public ResultLocation(){
+		this.id = "";
 		this.name = "";
 		this.url = "";
 		this.lat = 0f;
 		this.lng = 0f;
 		this.imgUrl = "";
+	}
+	public String getid(){
+		return id;
 	}
 	
 	public String getName() {
@@ -35,7 +40,9 @@ public class ResultLocation {
 		return labels;
 	}
 
-
+	public void setId(String id){
+		this.id = id;
+	}
 	public void setName(String name) {
 		this.name = name;
 	}

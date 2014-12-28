@@ -1,4 +1,4 @@
-package jp.leopanda.locationGetter;
+package jp.leopanda.locationGetter.test;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,13 +10,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import jp.leopanda.locationGetter.dataStore.Dao;
 import jp.leopanda.locationGetter.dataStore.DataStoreHandler;
+import jp.leopanda.locationGetter.BloggerService;
 import jp.loepanda.locationGetter.POJO.ResultLocation;
 
 @SuppressWarnings("serial")
+/**
+ * Test Servlet 
+ * @author LeoPanda
+ *
+ */
 public class Servlet extends HttpServlet {
-	
-	 	final boolean isTest = false;
-
+		static final boolean isTest = true;
 	 	@Override
 	 	/*
 	 	 * DoGet for test
@@ -33,7 +37,6 @@ public class Servlet extends HttpServlet {
 	 		List<ResultLocation> locations = new  ArrayList<ResultLocation>();
 	 		String JSON  = "application/json;charset=utf-8";
 	 		String JSONP = "text/javascript;charset=utf-8";
-	 		String category = req.getParameter("category");  // get request parameter for selected category
 
 	 		//パラメータがあればディリートリガをクリア
 	 		String reset = req.getParameter("reset");
@@ -54,8 +57,7 @@ public class Servlet extends HttpServlet {
 			//データストアの書き込み前にレスポンスを送信
 			if(callBack != null){
 				resp.setContentType(JSONP);
-				resp.getWriter().print(callBack + "(" + responseBody +"," + category + ");");
-
+				resp.getWriter().print(callBack + "(" + responseBody + ");");
 			}else{
 				resp.setContentType(JSON);
 				resp.getWriter().print(responseBody);				
@@ -72,7 +74,10 @@ public class Servlet extends HttpServlet {
 	 		}
 
 	 	}
-	 	
+
+	 	/*
+		 * doPost
+		 */
 		public void doPost(HttpServletRequest req, HttpServletResponse resp)
 				throws IOException {
 		}
