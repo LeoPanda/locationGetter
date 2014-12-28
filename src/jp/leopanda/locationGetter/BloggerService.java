@@ -12,11 +12,15 @@ import jp.leopanda.locationGetter.UrlService.Result;
 import jp.loepanda.locationGetter.POJO.BloggerPostItem;
 import jp.loepanda.locationGetter.POJO.BloggerPostList;
 import jp.loepanda.locationGetter.POJO.ResultLocation;
-
+/**
+ * Blogger API ハンドリングサービス
+ * @author LeoPanda
+ *
+ */
 public class BloggerService {
 	private static String API_KEY = "AIzaSyC25g27Bbczu5xXyyPoEcrK-scuoZEjTFM";
 	private static String BLOG_ID = "8188837734572962617";
-	private static String FEALD_ITEMS = "items(images%2Clabels%2Clocation%2Ctitle%2Curl)%2CnextPageToken";
+	private static String FEALD_ITEMS = "items(id%2Cimages%2Clabels%2Clocation%2Ctitle%2Curl)%2CnextPageToken";
 	private static int blogger_max_results = 10;
 	
 	private static final Logger log = Logger.getLogger(Servlet.class.getName());
@@ -25,10 +29,10 @@ public class BloggerService {
 	 * Blogger投稿のgeoTag情報をJSON形式で取り出す。
 	 * @return
 	 */
-	public String getLocationJson() {
+	public String getLocationJson(List<ResultLocation> location) {
 		String retJson = null;
 		try {
-			retJson =  JSON.encode(getLocationList());
+			retJson =  JSON.encode(location);
 		} catch (JSONException e) {
 			log.info("JsonException occured while encoding.");
 			e.printStackTrace();
@@ -43,7 +47,7 @@ public class BloggerService {
 	 * @return 地図情報のリスト
 	 * @throws HostGateException
 	 */
-	private List<ResultLocation> getLocationList() {
+	public List<ResultLocation> getLocationList(boolean isTest) {
 		List<ResultLocation> resultLocationList = new ArrayList<ResultLocation>();
 		BloggerPostList onePage;
 		String nextPageToken = "";
@@ -52,6 +56,7 @@ public class BloggerService {
 			for (BloggerPostItem items : onePage.getItems()) {
 				if ( items.getLocation() != null ){
 					ResultLocation resultLocation = new ResultLocation();
+					resultLocation.setId(items.getId());
 					resultLocation.setName(items.getTitle());
 					resultLocation.setUrl(items.getUrl());
 					resultLocation.setLng(items.getLocation().getLng());
@@ -64,7 +69,7 @@ public class BloggerService {
 					resultLocationList.add(resultLocation);
 				}
 			}
-			nextPageToken = onePage.getNextPageToken();
+			nextPageToken = isTest ? null : onePage.getNextPageToken();
 		}
 		return resultLocationList;
 	}

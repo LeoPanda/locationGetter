@@ -1,7 +1,11 @@
 package jp.loepanda.locationGetter.POJO;
 
 import java.io.Serializable;
-
+/**
+ * 投稿記事リスト
+ * @author LeoPanda
+ *
+ */
 @SuppressWarnings("serial")
 public class BloggerPostList implements Serializable{
 	public String nextPageToken;

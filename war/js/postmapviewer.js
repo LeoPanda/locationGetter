@@ -21,6 +21,7 @@
 	    		center: center,                            
 	    		mapTypeControl: false,
 	    		panControl:false,
+	    		styles: [{stylers: [ {saturation: -10 }]}],
 	    		mapTypeId: google.maps.MapTypeId.ROADMAP    
 			 };
 			return new google.maps.Map( document.getElementById( "map-canvas"), myOptions);
@@ -128,7 +129,7 @@
 			var mcs = setMarkers(LOCATION_DATA,map,selector.options[selector.selectedIndex].value);
 		    markerCluster.addMarkers(mcs);// MarkerClusterを表示
 		};
-		//オプションパラメータの取得
+		//オプションパラメータ(初期選択カテゴリ)の取得
 		function getParm(){
 			var urlparm = location.search;
 			var parm;

@@ -1,4 +1,4 @@
-package jp.leopanda.locationGetter;
+package jp.leopanda.locationGetter.test;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,13 +10,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import jp.leopanda.locationGetter.dataStore.Dao;
 import jp.leopanda.locationGetter.dataStore.DataStoreHandler;
+import jp.leopanda.locationGetter.BloggerService;
 import jp.loepanda.locationGetter.POJO.ResultLocation;
 
 @SuppressWarnings("serial")
+/**
+ * Test Servlet 
+ * @author LeoPanda
+ *
+ */
 public class Servlet extends HttpServlet {
-	
-	 	final boolean isTest = false;
-
+		static final boolean isTest = true;
 	 	@Override
 	 	/*
 	 	 * DoGet for test
@@ -70,7 +74,10 @@ public class Servlet extends HttpServlet {
 	 		}
 
 	 	}
-	 	
+
+	 	/*
+		 * doPost
+		 */
 		public void doPost(HttpServletRequest req, HttpServletResponse resp)
 				throws IOException {
 		}
