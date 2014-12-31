@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import jp.loepanda.locationGetter.POJO.ResultLocation;
 /**
@@ -18,7 +20,7 @@ public class DataStoreHandler {
  	 */
  	public boolean checkTriggerd(){
 		boolean isTriggerd = false;
- 		Calendar calendar = Calendar.getInstance();
+ 		Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"),Locale.JAPAN);
 		SimpleDateFormat day = new SimpleDateFormat("yy-MM-dd");
 		String today = day.format(calendar.getTime());
 		Dao dao = Dao.INSTANCE;

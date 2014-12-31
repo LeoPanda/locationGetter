@@ -1,0 +1,8 @@
+<cronentries>
+  <cron>
+    <url>/locationgetter?reload=ture</url>
+    <description>reload stored data.</description>
+    <schedule>every day 00:10</schedule>
+    <timezone>Asia/Tokyo</timezone>
+  </cron>
+</cronentries>
