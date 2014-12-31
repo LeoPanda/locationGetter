@@ -23,8 +23,8 @@ public class Servlet extends HttpServlet {
 	 	 * http://(デプロイサーバー)/test
 	 	 * パラメータ:
 	 	 * callback:JSONPコールバック関数を指定
-	 	 * reset: (true or false) Blogger APIからデータを取得するように指定
-	 	 * resetall: (true or false) データストアの全情報を削除する 
+	 	 * reload: (true) パラメータがあればBlogger APIからデータを取得しなおす
+	 	 * resetall: (true) パラメータがあればデータストアの全情報を削除する 
 	 	 */
 		public void doGet(HttpServletRequest req, HttpServletResponse resp)
 				throws IOException {
@@ -33,20 +33,29 @@ public class Servlet extends HttpServlet {
 	 		List<ResultLocation> locations = new  ArrayList<ResultLocation>();
 	 		String JSON  = "application/json;charset=utf-8";
 	 		String JSONP = "text/javascript;charset=utf-8";
+	 		boolean isTriggerd = false; 
 
 	 		//パラメータがあればディリートリガをクリア
-	 		String reset = req.getParameter("reset");
-	 		if(reset != null){
-	 			Dao.INSTANCE.removeTrigger();
+	 		String reload = req.getParameter("reload");
+	 		/*
+	 		 * *データの書き換えはCronにより定期的におこなうように変更し
+	 		 * 通常のアクセスはデータストア経由とするように変更
+	 		 */
+//	 		if(reset != null){
+//	 			Dao.INSTANCE.removeTrigger();
+//	 		}
+	 		if(reload != null){
+		 		isTriggerd = dataStoreHandler.checkTriggerd();
 	 		}
-	 		//今日最初のリクエストならBlogger APIから
+	 		//トリガーが設定されていればAPIからデータを取得しデータストアへ転送
 	 		//そうでなければデータストアから位置情報を取得しレスポンスデータを作る
-	 		boolean isTriggerd = dataStoreHandler.checkTriggerd();
-			if(isTriggerd){
+
+	 		if(isTriggerd){
 				locations = blogService.getLocationList(isTest);
 			}else{
 				locations =	dataStoreHandler.getFromDataStore();
 			}
+	 		
 	
 			String responseBody = blogService.getLocationJson(locations);
 			String callBack = req.getParameter("callback");  // get request parameter for JSONP
@@ -62,7 +71,7 @@ public class Servlet extends HttpServlet {
 			if(isTriggerd){
 				dataStoreHandler.setToDataStore(locations);
 			}
-			//パラメータがあればデータストアの全情報をクリア
+			//データストアの全情報をクリアするオプション
 	 		String resetall = req.getParameter("resetall");
 	 		if(resetall != null){
 	 			Dao.INSTANCE.removeTrigger();

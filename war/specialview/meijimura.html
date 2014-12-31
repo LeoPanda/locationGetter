@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
+<!-- above set at the top of the file will set     -->
+<!-- the browser's rendering engine into           -->
+<!-- "Quirks Mode". Replacing this declaration     -->
+<!-- with a "Standards Mode" doctype is supported, -->
+<!-- but may lead to some differences in layout.   -->
+<!-- デフォルト表示ページ -->
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>LeoPanda Geotag location getter</title>
+    <style>
+		#map-canvas label { width: auto; display: inline; }
+		#map-canvas img.infoImage {text-align:center;max-width:120px; max-height:150px;}
+		#map-canvas img { max-width: none; max-height: none; }
+		#category-panel {z-index: 0;position: absolute;left: 88px;top: 10px;}
+		#resetZoom {background: url(../image/home.png) no-repeat 0 2px;width: 25px;height: 20px;opacity: 0.6;z-index: -1px;border: none}
+	</style>	
+  </head>
+  <body>
+  <div id="map-canvas" style="height: 600px; width: 450px;">
+  <br/><br/><br/>
+  <a style="font-size:18px;clear:both;align:center;text-align:center;color:#888888;">地図情報を読み込んでいます。・・・しばらくお待ち下さい。</a>
+  </div>  
+  	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC25g27Bbczu5xXyyPoEcrK-scuoZEjTFM&amp;sensor=false" type="text/javascript"></script>
+	<script type="text/javascript" src="../js/markerclusterer_compiled.js"></script>
+	<script type="text/javascript">
+		//デフォルト値
+		defaultCenter = new google.maps.LatLng(35.3431788,136.9899372);
+		defaultZoom = 16;
+		icons = [
+		         ["明治村","../image/pin.png","明治村"],
+				];
+
+		Category = "明治村";
+		OmitString = "明治村を歩く　";
+		mcOptions = { gridSize: 1, maxZoom: 15};//MarkerClusterオプション	
+
+	</script>
+	<script type="text/javascript" src="../js/mapcontrolcommon.js"></script>
+  	<script type="text/javascript" src="../js/infoViewer.js"></script>
+	<script type="text/javascript" src="../locationgetter?callback=viewMarkers"></script>
+  	</body>
+</html>

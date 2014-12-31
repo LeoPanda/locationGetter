@@ -13,9 +13,9 @@
 	    		panControl:false,
 	    		styles: [{stylers: [ {saturation: -10 }]}],
 	    		mapTypeId: google.maps.MapTypeId.ROADMAP    
-			 };
+			 }
 			return new google.maps.Map( document.getElementById( "map-canvas"), myOptions);
-    	};
+    	}
 		//マーカー描画
 		function setMarker(lat,lng,icon,map){
 			var marker = new google.maps.Marker( {
@@ -24,9 +24,9 @@
 	            map: map
 	        });
 			return marker;
-		};
-        //InfoWindow設定
-		function setInfoWindow(locData,marker,i,map){
+		}
+        //マーカーをクリックすると開くウィンドウの設定
+		function setClickWindow(locData,marker,i,map){
 		    var infowindow = new google.maps.InfoWindow();		
 	        google.maps.event.addListener( marker, 'click', ( function( marker, i) {
 	            return function() {
@@ -44,7 +44,7 @@
 	            };
 	        })( marker, i));
 	        return infowindow;
-		};
+		}
     	//マーカー作成とMarkerCluster配列の作成
     	function setMarkers(locData,map,targetLabel){
     		var icon = setIcon(targetLabel);
@@ -53,7 +53,7 @@
 	    	if(targetLabel==''){
 			    for (i = 0; i < locData.length; i++) {
 			        var marker = setMarker(locData[i].lat,locData[i].lng,icon);		
-			    	var infowindow = setInfoWindow(locData,marker,i,map);
+			    	var infowindow = setClickWindow(locData,marker,i,map);
 				    mcs.push( marker);
 			    };
 		    }else{
@@ -62,15 +62,35 @@
 				    	for (j = 0; j < locData[i].labels.length; j++){
 				    		  if(locData[i].labels[j] == targetLabel){
 							        var marker = setMarker(locData[i].lat,locData[i].lng,icon);				    			  
-							    	var infowindow = setInfoWindow(locData,marker,i,map);
+							    	var infowindow = setClickWindow(locData,marker,i,map);
 								    mcs.push( marker);
-				    		};				    	
-				    	};
-		    		};
-	    		};		    
-		    };   
+				    		}				    	
+				    	}
+		    		}
+			    }		    
+		    }  
 		    return mcs;
-    	};
+    	}
+		//常表示infoWindowの設定
+		function setInfoWindows(locData,map,targetLabel,omitString){
+			for(i = 0; i < locData.length; i++){
+	    		if(locData[i].labels.length > 0){
+			    	for (j = 0; j < locData[i].labels.length; j++){
+			    		if(locData[i].labels[j] == targetLabel){
+							var infoWindow = new google.maps.InfoWindow( {
+					            position: new google.maps.LatLng( locData[i].lat, locData[i].lng),
+					            content: 
+					                '<div class="infoWindow">' +
+					                '<a href="' + locData[i].url + '" TARGET="_blank">' 
+					                + locData[i].name.replace(omitString,"") + '</a>' +
+					                '</div>'
+							});
+							infoWindow.open(map);
+			    		}
+			    	}
+	    		}
+			}
+		}
 		//アイコンの設定
 		function setIcon(label){
 			var icon;
@@ -80,7 +100,7 @@
 					return icon;
 				}
 			}
-		};
+		}
 		//カテゴリセレクタの描画
 		function setSelector(selected){
 			var options = '';
@@ -93,7 +113,7 @@
 			var selector = document.getElementById('category-selector')
 			selector.innerHTML = options;
 			return selector;
-		};
+		}
 		//カテゴリセレクタの描画（IEでinnerHTMLが使えないバグ対応）
    		function setSelectorIE(selected){
 			var selector = document.getElementById('category-selector');
@@ -105,20 +125,20 @@
 				selector.appendChild(op);
 			}
 			return selector;
-		};
+		}
 
 		//ズームを戻す
 		function resetZoom(){
 			map.setCenter(defaultCenter);
 			map.setZoom(defaultZoom);			
-		};
+		}
 		//カテゴリ変更時処理
 		function onCategoryChange(selector){
 			resetZoom();
 			markerCluster.clearMarkers();
 			var mcs = setMarkers(LOCATION_DATA,map,selector.options[selector.selectedIndex].value);
 		    markerCluster.addMarkers(mcs);// MarkerClusterを表示
-		};
+		}
 		//URLからオプションパラメータを取得する
 		function getParm(){
 			var urlparm = location.search;
@@ -129,4 +149,4 @@
 				parm = '';
 			}
 			return decodeURIComponent(parm);
-		};
+		}
