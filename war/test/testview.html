@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
+<!-- above set at the top of the file will set     -->
+<!-- the browser's rendering engine into           -->
+<!-- "Quirks Mode". Replacing this declaration     -->
+<!-- with a "Standards Mode" doctype is supported, -->
+<!-- but may lead to some differences in layout.   -->
+<!-- テスト用（投稿件数を少数に制限） -->
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>LeoPanda Geotag location getter</title>
+    <style>
+		#map-canvas label { width: auto; display: inline; }
+		#map-canvas img.infoImage {text-align:center;max-width:120px; max-height:150px;}
+		#map-canvas img { max-width: none; max-height: none; }
+		#category-panel {z-index: 0;position: absolute;left: 88px;top: 10px;}
+		#resetZoom {background: url(/image/home.png) no-repeat 0 2px;width: 25px;height: 20px;opacity: 0.6;z-index: -1px;border: none}
+	</style>	
+  </head>
+  <body>
+  <div id="map-canvas" style="height: 545px; width: 625px;">
+  <br/><br/><br/>
+  <a style="font-size:18px;clear:both;align:center;text-align:center;color:#888888;">地図情報を読み込んでいます。・・・しばらくお待ち下さい。</a>
+  </div>
+   <div id="category-panel">
+  <select id="category-selector" onChange="onCategoryChange(this);">
+  </select>
+  <button id="resetZoom" onclick="resetZoom();"> </button>
+  </div>
+  
+  	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC25g27Bbczu5xXyyPoEcrK-scuoZEjTFM&amp;sensor=false" type="text/javascript"></script>
+	<script type="text/javascript" src="/js/markerclusterer_compiled.js"></script>
+  	<script type="text/javascript" src="/js/postmapviewer.js"></script>
+	<script type="text/javascript" src="/locationgetter/test?callback=viewMarkers"></script>
+  	</body>
+</html>

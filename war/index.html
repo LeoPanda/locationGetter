@@ -32,6 +32,20 @@
   
   	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC25g27Bbczu5xXyyPoEcrK-scuoZEjTFM&amp;sensor=false" type="text/javascript"></script>
 	<script type="text/javascript" src="/js/markerclusterer_compiled.js"></script>
+	<script type="text/javascript">
+		//デフォルト値
+		defaultCenter = new google.maps.LatLng(35.052763,135.352651,17);
+		defaultZoom = 6;
+		mcOptions = { gridSize: 35, maxZoom: 15};//MarkerClusterオプション	
+		icons = [
+		         ["","/image/footprints.png","すべて"],
+		         ["絶景","/image/camera.png","絶景ポイント"],
+		         ["花","/image/cherry.png","花風景ポイント"],
+		         ["紅葉","/image/leaf.png","紅葉ポイント"],
+		         ["ルート図","/image/bike.png","自転車ルート"]
+				];
+	</script>
+	<script type="text/javascript" src="/js/mapcontrolcommon.js"></script>
   	<script type="text/javascript" src="/js/postmapviewer.js"></script>
 	<script type="text/javascript" src="/locationgetter?callback=viewMarkers"></script>
   	</body>
