@@ -11,7 +11,15 @@
 	    		center: center,                            
 	    		mapTypeControl: false,
 	    		panControl:false,
-	    		styles: [{stylers: [ {saturation: -10 }]}],
+	    		styles: [{featureType:"all"},{
+	    				  	stylers: [
+		                     {saturation:-72},
+		                     {weight:1.1},
+		                     {gamma:0.69},
+		                     {lightness:26},
+		                     {visibility:"simplified"}
+		                   ]
+	    				}],
 	    		mapTypeId: google.maps.MapTypeId.ROADMAP    
 			 }
 			return new google.maps.Map( document.getElementById( "map-canvas"), myOptions);

@@ -9,17 +9,17 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class BloggerPostItemLocation implements Serializable{
 	public String name;
-	public Float lat;
-	public Float lng;
+	public Double lat;
+	public Double lng;
 	public String span;
 	
 	public String getName() {
 		return name;
 	}
-	public Float getLat() {
+	public Double getLat() {
 		return lat;
 	}
-	public Float getLng() {
+	public Double getLng() {
 		return lng;
 	}
 	public String getSpan(){

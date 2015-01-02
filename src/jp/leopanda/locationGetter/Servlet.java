@@ -8,13 +8,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import jp.leopanda.locationGetter.dataStore.Dao;
 import jp.leopanda.locationGetter.dataStore.DataStoreHandler;
+import jp.leopanda.locationGetter.dataStore.Entities;
 import jp.loepanda.locationGetter.POJO.ResultLocation;
 
 @SuppressWarnings("serial")
+/**
+ * Bloggerの記事から位置情報を読み取って返す。
+ * Blogger APIV3には使用制限があるので、APIから１日１回だけデータを読み取って
+ * GAEのData Storeへ転送し、通常はここからデータを送信する。
+ * 
+ * @author LeoPanda
+ *
+ */
 public class Servlet extends HttpServlet {
-	
+		/**
+		 * isTest = trueにセットすると
+		 * Blogger APIから１ページ分だけしか読み込まない
+		 */
 	 	final boolean isTest = false;
 
 	 	@Override
@@ -28,53 +39,57 @@ public class Servlet extends HttpServlet {
 	 	 */
 		public void doGet(HttpServletRequest req, HttpServletResponse resp)
 				throws IOException {
+	 		//パラメータの取得
+	 		String reload 	= req.getParameter("reload");
+	 		String resetall = req.getParameter("resetall");
+			String callBack = req.getParameter("callback");
+
 	 		BloggerService blogService = new BloggerService();
 	 		DataStoreHandler dataStoreHandler = new DataStoreHandler();
 	 		List<ResultLocation> locations = new  ArrayList<ResultLocation>();
 	 		String JSON  = "application/json;charset=utf-8";
 	 		String JSONP = "text/javascript;charset=utf-8";
-	 		String category = req.getParameter("category");  // get request parameter for selected category
-	 		boolean isTriggerd = false; 
 
-	 		//パラメータがあればディリートリガをクリア
-	 		String reload = req.getParameter("reload");
+	 		boolean isTriggerd = false;   //データストアの入れ替え指示 
 	 		/*
-	 		 * *データの書き換えはCronにより定期的におこなうように変更し
-	 		 * 通常のアクセスはデータストア経由とするように変更
+	 		 * パラメータによりリロード指示された場合、
+	 		 * Blogger APIを読み直しデータストアを入れ替える。
+	 		 * 
+	 		 * ただし、１日に１度しか実行できない。
+	 		 * 
+	 		 * 通常はcronによって自動実行される。
 	 		 */
 	 		if(reload != null){
-		 		isTriggerd = dataStoreHandler.checkTriggerd();
+		 		isTriggerd = dataStoreHandler.checkTriggerd(); //当日中の実行実績をチェック
 	 		}
-	 		//トリガーが設定されていればAPIからデータを取得しデータストアへ転送
-	 		//そうでなければデータストアから位置情報を取得しレスポンスデータを作る
-
 	 		if(isTriggerd){
 				locations = blogService.getLocationList(isTest);
 			}else{
 				locations =	dataStoreHandler.getFromDataStore();
-			}
-	 		
-	
-			String responseBody = blogService.getLocationJson(locations);
-			String callBack = req.getParameter("callback");  // get request parameter for JSONP
+			} 		
+	 		//応答データを作成
+			String responseJsonBody = blogService.getLocationJson(locations);
+
 			//データストアの書き込み前にレスポンスを送信
 			if(callBack != null){
 				resp.setContentType(JSONP);
-				resp.getWriter().print(callBack + "(" + responseBody +"," + category + ");");
-
+				resp.getWriter().print(callBack + "(" + responseJsonBody + ");");
 			}else{
 				resp.setContentType(JSON);
-				resp.getWriter().print(responseBody);				
+				resp.getWriter().print(responseJsonBody);				
 			}
+			
 			//データストアへの書き込み
 			if(isTriggerd){
 				dataStoreHandler.setToDataStore(locations);
 			}
 			//データストアの全情報をクリアするオプション
-	 		String resetall = req.getParameter("resetall");
 	 		if(resetall != null){
-	 			Dao.INSTANCE.removeTrigger();
-	 			Dao.INSTANCE.removeAllStored();
+	 			dataStoreHandler.removeEntity(Entities.LOCATION.getName());
+	 			dataStoreHandler.removeEntity(Entities.TRIGGER.getName());
+	 			dataStoreHandler.removeEntity(Entities.OLD_TRIGGER.getName());
+	 			dataStoreHandler.removeEntity(Entities.OLD_LOCATION.getName());
+	 			dataStoreHandler.removeEntity(Entities.OLD_LABEL.getName());
 	 		}
 
 	 	}

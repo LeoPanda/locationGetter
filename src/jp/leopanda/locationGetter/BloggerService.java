@@ -1,6 +1,7 @@
 package jp.leopanda.locationGetter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -55,27 +56,40 @@ public class BloggerService {
 		String nextPageToken = "";
 		while (nextPageToken != null) {
 			onePage = getPostOnePage(nextPageToken);
-			for (BloggerPostItem items : onePage.getItems()) {
-				if ( items.getLocation() != null ){
-					ResultLocation resultLocation = new ResultLocation();
-					resultLocation.setId(items.getId());
-					resultLocation.setName(items.getTitle());
-					resultLocation.setUrl(items.getUrl());
-					resultLocation.setLng(items.getLocation().getLng());
-					resultLocation.setLat(items.getLocation().getLat());
-					if(items.getImages().length>0){
-						resultLocation.setImgUrl(items.getImages()[0].getUrl()
-													.replaceFirst("/s\\d+/","/s120/"));
+			if(onePage.getItems() != null){
+				for (BloggerPostItem items : onePage.getItems()) {
+					if ( items.getLocation() != null ){
+						resultLocationList.add(setResultLocation(items));
 					}
-					resultLocation.setLabels(items.getLabels());
-					resultLocationList.add(resultLocation);
 				}
+				nextPageToken = isTest ? null : onePage.getNextPageToken();
+			} else {
+				nextPageToken = null;
 			}
-			nextPageToken = isTest ? null : onePage.getNextPageToken();
 		}
 		return resultLocationList;
 	}
-		
+
+	/**
+	 * 結果データのアイテムをセット
+	 * @param items
+	 * @return
+	 */
+	private ResultLocation setResultLocation(BloggerPostItem items) {
+		ResultLocation resultLocation = new ResultLocation();
+		resultLocation.setId(items.getId());
+		resultLocation.setName(items.getTitle());
+		resultLocation.setUrl(items.getUrl());
+		resultLocation.setLng(items.getLocation().getLng());
+		resultLocation.setLat(items.getLocation().getLat());
+		if(items.getImages().length>0){
+			resultLocation.setImgUrl(items.getImages()[0].getUrl()
+										.replaceFirst("/s\\d+/","/s120/"));
+		}
+		resultLocation.setLabels(Arrays.asList(items.getLabels()));
+		return resultLocation;
+	}
+
 	/**
 	 * blogger_max_resultsで指定した数（最大１０）の
 	 * Blogger投稿を配列として取得する

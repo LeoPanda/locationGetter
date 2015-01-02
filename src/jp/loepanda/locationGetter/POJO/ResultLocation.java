@@ -1,20 +1,22 @@
 package jp.loepanda.locationGetter.POJO;
 
+import java.util.List;
+
 public class ResultLocation {
 	private String id;
 	public String name;
 	public String url;
-	public Float lat;
-	public Float lng;
+	public Double lat;
+	public Double lng;
 	public String imgUrl;
-	public String[] labels;
+	public List<String> labels;
 	
 	public ResultLocation(){
 		this.id = "";
 		this.name = "";
 		this.url = "";
-		this.lat = 0f;
-		this.lng = 0f;
+		this.lat = 0d;
+		this.lng = 0d;
 		this.imgUrl = "";
 	}
 	public String getid(){
@@ -27,16 +29,16 @@ public class ResultLocation {
 	public String getUrl() {
 		return url;
 	}
-	public Float getLat() {
+	public Double getLat() {
 		return lat;
 	}
-	public Float getLng() {
+	public Double getLng() {
 		return lng;
 	}
 	public String getImgUrl() {
 		return imgUrl;
 	}
-	public String[] getLabels() {
+	public List<String> getLabels() {
 		return labels;
 	}
 
@@ -49,17 +51,17 @@ public class ResultLocation {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public void setLat(float lat) {
+	public void setLat(Double lat) {
 		this.lat = lat;
 	}
-	public void setLng(float lng) {
+	public void setLng(Double lng) {
 		this.lng = lng;
 	}
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
 	}
 
-	public void setLabels(String[] labels) {
+	public void setLabels(List<String> labels) {
 		this.labels = labels;
 	}
 
